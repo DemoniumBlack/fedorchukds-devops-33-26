@@ -90,5 +90,36 @@
 
 ## Выполнение основной части
 
+### DevOps
 
+Для выполнения пункта DevOps в репозиторий нужно добавить файл `requirements.txt`, из которого будут устанавливаться зависимости `flask, flask_restful, flask_jsonpify` и `Dockerfile` для сборки образа на основе Centos 7 с выполнением python-скрипта:
 
+![img_7.png](IMG/img_7.png)
+
+Файл GitLab CI/CD для автоматизации процесса сборки выглядит следующим образом: 
+
+```
+stages:
+    - build
+    - deploy
+image: docker:20.10.5
+services:
+    - docker:20.10.5-dind
+builder:
+    stage: build
+    script:
+        - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH/hello:gitlab-$CI_COMMIT_SHORT_SHA .
+    except:
+        - main
+deployer:
+    stage: deploy
+    script:
+        - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH/hello:gitlab-$CI_COMMIT_SHORT_SHA .
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker push $CI_REGISTRY/$CI_PROJECT_PATH/hello:gitlab-$CI_COMMIT_SHORT_SHA
+    only:
+        - main
+
+```
+
+Ссылка на файл: 
