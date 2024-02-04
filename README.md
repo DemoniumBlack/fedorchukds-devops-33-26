@@ -62,6 +62,8 @@
 - лог успешного выполнения пайплайна;
 - решённый Issue.
 
+---
+
 ## Подготовка к выполнению
 
 1. Создал инстанс с gitlab:
@@ -88,15 +90,23 @@
 
 ![img_6.png](IMG/img_6.png)
 
+
+
 ## Выполнение основной части
+
+---
 
 ### DevOps
 
-Для выполнения пункта DevOps в репозиторий нужно добавить файл `requirements.txt`, из которого будут устанавливаться зависимости `flask, flask_restful, flask_jsonpify` и `Dockerfile` для сборки образа на основе Centos 7 с выполнением python-скрипта:
+Для выполнения этой части задания, в репозиторий нужно добавить файл `requirements.txt`, из которого будут устанавливаться зависимости `flask, flask_restful, flask_jsonpify` и `Dockerfile` для сборки образа на основе Centos 7 с выполнением python-скрипта:
 
 ![img_7.png](IMG/img_7.png)
 
-Файл GitLab CI/CD для автоматизации процесса сборки выглядит следующим образом: 
+Ссылка на файл `requirements.txt`: https://github.com/DemoniumBlack/fedorchukds-devops-33-26/blob/main/SRC/requirements.txt
+
+Ссылка на файл `Dockerfile`: https://github.com/DemoniumBlack/fedorchukds-devops-33-26/blob/main/SRC/Dockerfile
+
+Файл GitLab CI/CD `.gitlab-ci.yml` для автоматизации процесса сборки выглядит следующим образом: 
 
 ```
 stages:
@@ -122,4 +132,61 @@ deployer:
 
 ```
 
-Ссылка на файл: 
+Ссылка на файл: https://github.com/DemoniumBlack/fedorchukds-devops-33-26/blob/main/SRC/.gitlab-ci.yml
+
+Также потребовалось добавить переменные в GitLab Variables:
+
+![img_8.png](IMG/img_8.png)
+
+
+Выполняю процесс сборки проекта, запустив Pipeline. Проверю результат:
+
+![img_9.png](IMG/img_9.png)
+
+Сборка завершилась успешно, Docker образ был выложен в GitLab Registry:
+
+![img_10.png](IMG/img_10.png)
+
+Проверю, действительно ли образ находится в GitLab Registry. Для этого в GitLab перехожу в Project -> Deploy -> Container Registry и вижу там образ:
+
+![img_11.png](IMG/img_11.png)
+
+---
+
+### Product Owner
+
+Для выполнения этой части задания, создаю Issue с указанием метода, в котором необходимо исправление, а также указываю, какой текст нужно изменить. Также создаю новый label: feature. Результат создания Issue:
+
+![img_12.png](IMG/img_12.png)
+
+---
+
+### Developer
+
+Для выполнения этой части задания, создаю в Issue отдельную ветку с именем `message_edit`, в которой редактирую файл `python-api.py`, а именно, исправляю в нем текст сообщения и метод вызова GET:
+
+![img_13.png](IMG/img_13.png)
+
+Создаю Merge Request с вливанием необходимых изменения в ветку main, проверяю, что сборка прошла успешно:
+
+![img_14.png](IMG/img_14.png)
+
+После выполнения Merge можно посмотреть Commit и убедиться, что изменения влиты и сборка завершена успешно:
+
+![img_15.png](IMG/img_15.png)
+
+---
+
+### Tester
+
+Для выполнения этой части задания, запущу docker-контейнер с образом `python-api:latest` и проверю возврат метода на корректность:
+
+![img_16.png](IMG/img_16.png)
+
+Также можно для проверки использовать браузер, перейдя по ссылке http://localhost:5290/rest/api/get_info:
+
+![img_17.png](IMG/img_17.png)
+
+Закрываю Issue с желаемым результатом:
+
+![img_18.png](IMG/img_18.png)
